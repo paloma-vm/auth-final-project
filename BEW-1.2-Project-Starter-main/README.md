@@ -1,3 +1,3 @@
-# My Project
+# Connected Care
 
-Add project description here.
+An app to help residents' families connect to care facilities.
