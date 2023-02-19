@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Connected Care</h1>
+<p>The bridge between family and caregiver.</p>
+
+{% for client in all_clients %}
+    <li><a href="/client/{{ client_id }}">{{client.first_name}}{{client.last_name}}</a></li>
+{% endfor %}
+{% endblock %}

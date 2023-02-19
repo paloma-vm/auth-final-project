@@ -1,5 +1,12 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 main = Blueprint('main', __name__)
 
-# Create your routes here.
+##########################################
+#           Routes                       #
+##########################################
+
+@main.route('/')
+def homepage():
+    return render_template('home.html')
+
