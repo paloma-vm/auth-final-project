@@ -53,14 +53,14 @@ class Caregiver(db.Model):
     """Caregiver model"""
     __tablename__ = 'caregivers'
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(80), nullable=False)
-    last_name = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    address = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     clients = db.relationship('Client', backref='caregiver', lazy=True)
 
     def __repr__(self):
-        return f"Caregiver: '{self.first_name} {self.last_name}'"
+        return f"Caregiver: '{self.name}'"
 
 class User(db.Model):
     """User model (client's family)"""
