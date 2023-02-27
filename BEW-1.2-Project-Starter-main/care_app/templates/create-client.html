@@ -7,71 +7,8 @@
     <fieldset>
         <legend>Enter new client info</legend>
 
-        {{ form.first_name.label }}
-        {{ form.first_name }}
-        <ul>
-        {% for error in form.first_name.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
+        {% extends 'client-form.html' %}
 
-        {{ form.last_name.label }}
-        {{ form.last_name }}
-        <ul>
-        {% for error in form.last_name.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-
-        {{ form.room_number.label }}
-        {{ form.room_number }}
-        <ul>
-        {% for error in form.room_number.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-        
-        {{ form.date_of_birth.label }}
-        {{ form.date_of_birth(placeholder="YYYY-mm-dd") }}
-        <ul>
-        {% for error in form.date_of_birth.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-        
-        {{ form.diet.label }}
-        {{ form.diet }}
-        <ul>
-        {% for error in form.diet.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-        
-        {{ form.medications.label }}
-        {{ form.medications }}
-        <ul>
-        {% for error in form.medications.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-
-        {{ form.move_in_date.label }}
-        {{ form.move_in_date(placeholder="YYYY-mm-dd") }}
-        <ul>
-        {% for error in form.move_in_date.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-        
-        {{ form.kin.label }}
-        {{ form.kin }}
-        <ul>
-        {% for error in form.kin.errors %}
-            <li class="error">{{ error }}</li>
-        {% endfor %}
-        </ul>
-            
-        {{ form.submit }}
     </fieldset>
 </form>
 

@@ -1,6 +1,7 @@
 """create db models to represent tables"""
 from care_app.extensions import db
 from sqlalchemy.orm import backref
+import enum
 
 class FormEnum(enum.Enum):
     """Helper class to use enums with forms"""
@@ -43,8 +44,8 @@ class Client(db.Model):
     diet = db.Column(db.Enum(Diet), nullable=False)
     medications = db.relationship('Medication', secondary='client_medications', backref='clients')
     move_in_date = db.Column(db.Date, nullable=False)
-    kin = db.relationship('User', backref='user', lazy=True)
-    activities_attended = db.relationship('Activity', secondary='client_activities', backref='clients')
+    kin = db.relationship('User', secondary='client_users', backref='client', lazy=True)
+    activities_attended = db.relationship('Activity', secondary='activity_client', backref='clients')
 
     def __repr__(self):
         return f"Client: '{self.first_name} {self.last_name}'"
@@ -70,7 +71,7 @@ class User(db.Model):
     last_name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    clients = db.relationship('Client', backref='user', lazy=True)
+    clients = db.relationship('Client', secondary='client_users', backref='kin')
     relation_to_client = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
@@ -97,7 +98,7 @@ class Activity(db.Model):
     description = db.Column(db.String(80), nullable=False)
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
-    clients = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
+    clients = db.relationship('Client', secondary='activity_client', backref='activities_attended')
 
     def __repr__(self):
         return f"Activity: '{self.name}'"
@@ -105,6 +106,16 @@ class Activity(db.Model):
 client_medication_table = db.Table('client_medications',
     db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True),
     db.Column('medication_id', db.Integer, db.ForeignKey('medications.id'), primary_key=True)
+)
+
+client_user_table = db.Table('client_users',
+    db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+)
+
+activity_client_table = db.Table('activities_clients',
+    db.Column('activity_id', db.Integer, db.ForeignKey('activities.id'), primary_key=True),
+    db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True)
 )
 
 class Message(db.Model):
