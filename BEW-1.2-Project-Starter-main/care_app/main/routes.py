@@ -6,7 +6,8 @@ main = Blueprint('main', __name__)
 #           Routes                       #
 ##########################################
 
-@main.route('/')
+@main.route('/') 
 def homepage():
+    
     return render_template('home.html')
 

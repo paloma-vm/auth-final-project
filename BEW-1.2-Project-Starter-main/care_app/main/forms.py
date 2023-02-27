@@ -1,9 +1,9 @@
 # Create your forms here.
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DateField, SelectField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, DateField, SelectField, SubmitField, IntegerField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import DataRequired, Length, ValidationError
-from care_app.models import Diet
+from care_app.models import Diet, Medication, Client, User
 
 class ClientForm(FlaskForm):
     """Form to create a new client profile (resident profile)"""
@@ -53,7 +53,7 @@ class CaregiverForm(FlaskForm):
     email = StringField('Email',
         validators=[DataRequired(), Length(min=8, max=120, message="Your email must be between 8 and 120 characters long.")])
     password = PasswordField('Password',
-        validators=[DataRequired(), Length(min=8, max=80, message="Your password must be between 8 and 80 characters long.")])
+        validators=[DataRequired(), Length(min=6, max=80, message="Your password must be between 6 and 80 characters long.")])
     submit = SubmitField('Submit')
 
     def validate_email(self, email):
@@ -62,6 +62,14 @@ class CaregiverForm(FlaskForm):
         if user:
             raise ValidationError('That email is already in use. Please choose a different one.')
     
+
+class MessageForm(FlaskForm):
+    """Form to create a new message"""
+    subject = StringField('Subject',
+        validators=[DataRequired(), Length(min=2, max=80, message="Your subject must be between 2 and 80 characters long.")])
+    body = TextAreaField('Body',
+        validators=[DataRequired(), Length(min=2, max=1000, message="Your message must be between 2 and 1000 characters long.")])
+    submit = SubmitField('Submit')
 
 
 

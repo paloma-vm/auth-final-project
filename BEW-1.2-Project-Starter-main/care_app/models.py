@@ -107,3 +107,16 @@ client_medication_table = db.Table('client_medications',
     db.Column('medication_id', db.Integer, db.ForeignKey('medications.id'), primary_key=True)
 )
 
+class Message(db.Model):
+    """Message model"""
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.String(80), nullable=False)
+    body = db.Column(db.String(80), nullable=False) #??
+    sender = db.Column(db.String(80), nullable=False)
+    receiver = db.Column(db.String(80), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    time = db.Column(db.Time, nullable=False)
+
+    def __repr__(self):
+        return f"Message: '{self.message}'"
