@@ -1,6 +1,7 @@
 """create db models to represent tables"""
 from care_app.extensions import db
 from sqlalchemy.orm import backref
+from flask_login import UserMixin
 import enum
 
 class FormEnum(enum.Enum):
@@ -22,16 +23,16 @@ class Diet(FormEnum):
     LACTOSE_INTOLERANT = 'Lactose Intolerant'
 
 
-class Medication(db.Model):
-    """Medication model"""
-    __tablename__ = 'medications'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    dosage = db.Column(db.String(80), nullable=False)
-    frequency = db.Column(db.String(80), nullable=False)
+# class Medication(db.Model):
+#     """Medication model"""
+#     __tablename__ = 'medications'
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(80), unique=True, nullable=False)
+#     dosage = db.Column(db.String(80), nullable=False)
+#     frequency = db.Column(db.String(80), nullable=False)
 
-    def __repr__(self):
-        return f"Medication: '{self.name}"
+#     def __repr__(self):
+#         return f"Medication: '{self.name}"
 
 class Client(db.Model):
     """Client model"""
@@ -42,10 +43,12 @@ class Client(db.Model):
     room_number = db.Column(db.Integer, nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
     diet = db.Column(db.Enum(Diet), nullable=False)
-    medications = db.relationship('Medication', secondary='client_medications', backref='clients')
-    move_in_date = db.Column(db.Date, nullable=False)
-    kin = db.relationship('User', secondary='client_users', backref='client', lazy=True)
-    activities_attended = db.relationship('Activity', secondary='activity_client', backref='clients')
+    # medications = db.relationship('Medication', secondary='client_medications', back_populates='clients')
+    start_date = db.Column(db.Date, nullable=False)
+    kin = db.relationship('User', secondary='clients_users', back_populates='clients')
+    activities_attended = db.relationship('Activity', secondary='activities_clients', back_populates='clients_who_attended')
+    caregiver = db.relationship('Caregiver', secondary='caregivers_clients', back_populates='clients_under_care')
+
 
     def __repr__(self):
         return f"Client: '{self.first_name} {self.last_name}'"
@@ -58,21 +61,23 @@ class Caregiver(db.Model):
     address = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    clients = db.relationship('Client', backref='caregiver', lazy=True)
+    clients_under_care = db.relationship('Client', secondary='caregivers_clients', back_populates='caregiver', lazy=True)
 
     def __repr__(self):
         return f"Caregiver: '{self.name}'"
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     """User model (client's family)"""
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(80), nullable=False)
-    last_name = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    clients = db.relationship('Client', secondary='client_users', backref='kin')
-    relation_to_client = db.Column(db.String(80), nullable=False)
+    first_name = db.Column(db.String(80)) # had to get rid of nullable=False so that an instance of user
+    # could be made at signup with only username and password, no other info needed
+    last_name = db.Column(db.String(80))
+    email = db.Column(db.String(120), unique=True)
+    clients = db.relationship('Client', secondary='clients_users', back_populates='kin')
+    relation_to_client = db.Column(db.String(80))
 
     def __repr__(self):
         return f"User: '{self.first_name} {self.last_name}'"
@@ -98,7 +103,7 @@ class Activity(db.Model):
     description = db.Column(db.String(80), nullable=False)
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
-    clients = db.relationship('Client', secondary='activity_client', backref='activities_attended')
+    clients_who_attended = db.relationship('Client', secondary='activities_clients', back_populates='activities_attended')
 
     def __repr__(self):
         return f"Activity: '{self.name}'"
@@ -108,7 +113,7 @@ client_medication_table = db.Table('client_medications',
     db.Column('medication_id', db.Integer, db.ForeignKey('medications.id'), primary_key=True)
 )
 
-client_user_table = db.Table('client_users',
+client_user_table = db.Table('clients_users',
     db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True),
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
 )
@@ -118,12 +123,17 @@ activity_client_table = db.Table('activities_clients',
     db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True)
 )
 
+caregiver_client_table = db.Table('caregivers_clients',
+    db.Column('caregiver_id', db.Integer, db.ForeignKey('caregivers.id'), primary_key=True),
+    db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True)
+)
+
 class Message(db.Model):
     """Message model"""
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String(80), nullable=False)
-    body = db.Column(db.String(80), nullable=False) #??
+    body = db.Column(db.Text, nullable=False)
     sender = db.Column(db.String(80), nullable=False)
     receiver = db.Column(db.String(80), nullable=False)
     date = db.Column(db.Date, nullable=False)

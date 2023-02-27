@@ -46,10 +46,10 @@
 {% endfor %}
 </ul>
 
-{{ form.move_in_date.label }}
-{{ form.move_in_date(placeholder="YYYY-mm-dd") }}
+{{ form.start_date.label }}
+{{ form.start_date(placeholder="YYYY-mm-dd") }}
 <ul>
-{% for error in form.move_in_date.errors %}
+{% for error in form.start_date.errors %}
     <li class="error">{{ error }}</li>
 {% endfor %}
 </ul>

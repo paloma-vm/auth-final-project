@@ -7,9 +7,14 @@
 {% if current_user.is_authenticated %}
 <h3>Your Clients:</h3>
 
-{% for client in all_clients %}
-    <li><a href="/client/{{ client_id }}">{{client.first_name}}{{client.last_name}}</a></li>
-{% endfor %}
+{% if clients %}
+    {% for client in all_clients %}
+        <li><a href="/client/{{ client_id }}">{{client.first_name}}{{client.last_name}}</a></li>
+    {% endfor %}
+
+{% else %}
+    <p>Any clients you have will be listed in this space. <a href="/create-client">Click here to add a new Client.</a></p>
+{% endif %}
 
 {% endif %}
 {% endblock %}
