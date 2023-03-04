@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
+from datetime import date, datetime
 
 from care_app.models import User, Client, Caregiver, Activity
 from care_app.main.forms import ClientForm, UserForm, CaregiverForm, MessageForm
@@ -18,11 +19,11 @@ def homepage():
     
     return render_template('home.html')
 
-@main.route('/create-client')
+@main.route('/create-client', methods=['GET', 'POST'])
 @login_required
 def create_client():
     '''Create a new Client'''
-    form = ClientForm
+    form = ClientForm()
     # if form is submitted with no errors:
     if form.validate_on_submit():
         new_client = Client(
@@ -31,7 +32,6 @@ def create_client():
             room_number = form.room_number.data,
             date_of_birth = form.date_of_birth.data,
             diet = form.diet.data,
-            medications = form.medications.data,
             start_date = form.start_date.data,
             kin = form.kin.data,
         )
@@ -41,7 +41,7 @@ def create_client():
         flash('New client was created successfully.')
         return redirect(url_for('main.client_detail', client_id=new_client.id))
 
-    return render_template('create-client.html')
+    return render_template('create-client.html', form=form)
 
 @main.route('/client/<client_id>', methods=['GET', 'POST'])
 @login_required
@@ -58,7 +58,7 @@ def client_detail(client_id):
         client.room_number = form.room_number.data
         client.date_of_birth = form.date_of_birth.data
         client.diet = form.diet.data
-        client.medications = form.medications.data
+        # client.medications = form.medications.data
         client.start_date = form.start_date.data
         client.kin = form.kin.data
     

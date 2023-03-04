@@ -10,15 +10,15 @@ class ClientForm(FlaskForm):
     
     first_name = StringField('First Name',
         validators=[DataRequired(), Length(min=2, max=80, message="Your name must be between 8 and 80 characters long.")])
-    last_name = StringField('First Name',
+    last_name = StringField('Last Name',
         validators=[DataRequired(), Length(min=2, max=80, message="Your name must be between 8 and 80 characters long.")])
     room_number = IntegerField('Room Number')
     date_of_birth = DateField('Date of Birth')
     diet = SelectField('Diet', choices=Diet.choices())
     # medications = QuerySelectMultipleField('Medications',
         # query_factory=lambda: Medication.query)
-    kin_id = StringField('Kin ID')
-    move_in_date = DateField('Move-in Date')
+    kin = StringField('Kin ID')
+    start_date = DateField('Start Date')
     submit = SubmitField('Submit')
 
 class UserForm(FlaskForm):

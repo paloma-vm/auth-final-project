@@ -38,14 +38,6 @@
 {% endfor %}
 </ul>
 
-{{ form.medications.label }}
-{{ form.medications }}
-<ul>
-{% for error in form.medications.errors %}
-    <li class="error">{{ error }}</li>
-{% endfor %}
-</ul>
-
 {{ form.start_date.label }}
 {{ form.start_date(placeholder="YYYY-mm-dd") }}
 <ul>
