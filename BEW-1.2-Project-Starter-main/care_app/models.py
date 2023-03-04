@@ -108,10 +108,10 @@ class Activity(db.Model):
     def __repr__(self):
         return f"Activity: '{self.name}'"
 
-client_medication_table = db.Table('client_medications',
-    db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True),
-    db.Column('medication_id', db.Integer, db.ForeignKey('medications.id'), primary_key=True)
-)
+# client_medication_table = db.Table('client_medications',
+#     db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True),
+#     db.Column('medication_id', db.Integer, db.ForeignKey('medications.id'), primary_key=True)
+# )
 
 client_user_table = db.Table('clients_users',
     db.Column('client_id', db.Integer, db.ForeignKey('clients.id'), primary_key=True),
