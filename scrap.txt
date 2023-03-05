@@ -1,2 +1,30 @@
 1940-06-01
 2020-03-15
+
+@main.route('/client/<client_id>', methods=['GET', 'POST'])
+@login_required
+def client_detail(client_id):
+    '''View Client info'''
+    client = Client.query.get(client_id)
+
+    form = ClientForm(obj=client)
+    # if form is submitted with no errors: update the Client object and save to the database
+    # flash a confirmation message and redirect user to the client detail page
+    if form.validate_on_submit():
+        client.first_name = form.first_name.data
+        client.last_name = form.last_name.data
+        client.room_number = form.room_number.data
+        client.date_of_birth = form.date_of_birth.data
+        client.diet = form.diet.data
+        # client.medications = form.medications.data
+        client.start_date = form.start_date.data
+        # client.kin_id = form.kin_id.data
+    
+        db.session.commit()
+
+        flash('Client updated successfully.')
+        return redirect(url_for('main.client_detail', client_id=client_id))
+    
+    # Send the form to the template and use it to render the form fields
+    client = Client.query.get(client_id)
+    return render_template('client-detail.html', client=client, form=form)

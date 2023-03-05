@@ -3,33 +3,22 @@
 
 <h1>Client Detail</h1>
 
-<strong>Client:</strong> {{client.first_name}}{{client.last_name}}
+<strong>Client:</strong> {{client.first_name}} {{client.last_name}}
 
 
 
-<h2>Activities Attended</h2>
+<h5>Activities Attended</h5>
 
 <div class="activities">
     {% for activity in client.activities_attended %}
     <div class="activity-details">
-        <a href="/activity/{{ activity.id }}">
-        <p><strong>{{ activity.name }}</strong></p></a>
+        <a href="/activity/{{ activity.id }}"></a>
+        <p><strong>{{ activity.name }}</strong></p>
         <p><strong>{{ activity.date }}</strong></p>
     </div>
     {% endfor %}
 </div>
 
-
-<h2>Edit Client</h2>
-
-<form method="POST", action="{{ url_for('main.client_detail', client_id=client.id ) }}">
-    {{ form.csrf_token }}
-    <fieldset>
-        <legend>Edit this Client:</legend>
-
-        {% include 'client-form.html' %}
-
-    </fieldset>
-</form>
+    <a href="/edit-client{{ client_id }}">Edit Client</a>
 
 {% endblock %}

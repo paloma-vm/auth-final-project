@@ -2,14 +2,14 @@
 {% block content %}
 
 <h1>Connected Care</h1>
-<p>The bridge between family and caregiver.</p>
+<h5>The bridge between family and caregiver.</h5>
 
 {% if current_user.is_authenticated %}
 <h3>Your Clients:</h3>
 
-{% if clients %}
+{% if all_clients %}
     {% for client in all_clients %}
-        <li><a href="/client/{{ client_id }}">{{client.first_name}}{{client.last_name}}</a></li>
+        <li><a href="/client/{{ client.id }}">{{client.first_name}} {{client.last_name}}</a></li>
     {% endfor %}
 
 {% else %}

@@ -45,7 +45,16 @@ def create_client():
 @main.route('/client/<client_id>', methods=['GET', 'POST'])
 @login_required
 def client_detail(client_id):
-    '''View and edit Client info'''
+    '''View Client info'''
+    client = Client.query.get(client_id)
+
+    return render_template('client-detail.html', client=client)
+    # return redirect(url_for('main.client_detail', client=client))
+    
+@main.route('/edit-client/<client_id>', methods=['GET', 'POST'])
+@login_required
+def edit_client(client_id):
+    '''Edit Client info'''
     client = Client.query.get(client_id)
 
     form = ClientForm(obj=client)
@@ -68,7 +77,7 @@ def client_detail(client_id):
     
     # Send the form to the template and use it to render the form fields
     client = Client.query.get(client_id)
-    return render_template('client-detail.html', client=client, form=form)
+    return render_template('edit-client.html', client=client, form=form)
 
 @main.route('/create-message', methods=['GET', 'POST'])
 @login_required
@@ -78,15 +87,56 @@ def create_message():
     # if form is submitted with no errors:
     if form.validate_on_submit():
         new_message = Message(
+            receiver = form.receiver.data,
             subject = form.subject.data,
             body = form.body.data,
-            photo_url = form.photo_url.data
-        )
+            photo_url = form.photo_url.data,
+            sender_id = current_user.id,
+            sender = User.query.get(current_user.id),
+            timestamp = datetime.now().strftime('%A, %B %d, %Y, %H:%M')
+            )
         db.session.add(new_message)
         db.session.commit()
 
         flash('New message was created successfully.')
-        return redirect(url_for('main.user_detail', message_id=new_message.id))
+        return redirect(url_for('main.message_detail', message_id=new_message.id))
 
     return render_template('create-message.html', form=form)
+
+@main.route('/message/<message_id>', methods=['GET', 'POST'])
+@login_required
+def message_detail(message_id):
+    '''View Message details'''
+    message = Message.query.get(message_id)
+
+    return render_template('message-detail.html', message=message)
+
+@main.route('/edit-message/<message_id>', methods=['GET', 'POST'])
+@login_required
+def edit_message(message_id):
+    '''Edit Message'''
+    message = Message.query.get(message_id)
+
+    form = MessageForm(obj=message)
+    # if form is submitted with no errors: update the Message object and save to the database
+    # flash a confirmation message and redirect user to the message detail page
+    if form.validate_on_submit():
+        message.receiver = form.receiver.data
+        message.subject = form.subject.data
+        message.body = form.body.data
+        message.photo_url = form.photo_url.data
+        message.sender_id = current_user.id
+        message.sender = User.query.get(current_user.id)
+        message.timestamp = datetime.now().strftime('%A, %B %d, %Y, %H:%M')
+        
+        db.session.commit()
+
+        flash('Message updated successfully.')
+        return redirect(url_for('main.message_detail', message_id=message_id))
+    
+    # Send the form to the template and use it to render the form fields
+    message = Message.query.get(message_id)
+    return render_template('edit-message.html',message=message, form=form)
+
+
 

@@ -1,0 +1,20 @@
+<!-- message-detail -->
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Your Message</h1>
+
+<strong>Message ID:</strong> {{message.id}}
+
+<div class="message">
+        <p><strong>{{ message.receiver }}</strong></p>
+        <p><strong>{{ message.subject }}</strong></p>
+        <p><strong>{{ message.body }}</strong></p>
+        <p><strong>{{ message.photo_url }}</strong></p>
+        <p><strong>{{ message.receiver }}</strong></p>
+        <p><strong>{{ message.timestamp }}</strong></p>
+</div>
+
+    <a href="/edit-message{{ message_id }}">Edit Message</a>
+
+{% endblock %}

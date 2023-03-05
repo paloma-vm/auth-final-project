@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="/edit-message">
+    {{ form.csrf_token }}
+
+    <h2>Edit Message</h2>
+
+    {% include 'message-form.html' %}
+
+</form>
+
+{% endblock %}

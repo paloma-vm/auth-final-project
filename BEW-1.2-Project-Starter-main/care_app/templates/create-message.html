@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
+<form method="POST" action="/create-message">
+    {{ form.csrf_token }}
 
-<h2>Compose Message</h2>
+    <h2>Compose Message</h2>
 
+    {{ form.subject.label }}
+    {{ form.subject(placeholder="subject") }}
+    <ul>
+    {% for error in form.subject.errors %}
+        <li class="error">{{ error }}</li>
+    {% endfor %}
+    </ul>
+    
+    {{ form.body.label }}
+    {{ form.body(placeholder="write your message here") }}
+    <ul>
+    {% for error in form.body.errors %}
+        <li class="error">{{ error }}</li>
+    {% endfor %}
+    </ul>
 
+    {{ form.photo_url.label }}
+    {{ form.photo_url(placeholder="add photo URL (optional)") }}
+    <ul>
+    {% for error in form.photo_url.errors %}
+        <li class="error">{{ error }}</li>
+    {% endfor %}
+    </ul>
+    
+    {{ form.submit }}
+
+</form>
 
 {% endblock %}

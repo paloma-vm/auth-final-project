@@ -1,0 +1,43 @@
+<!-- user-form -->
+{{ form.first_name.label }}
+{{ form.first_name }}
+<ul>
+{% for error in form.first_name.errors %}
+    <li class="error">{{ error }}</li>
+{% endfor %}
+</ul>
+
+{{ form.last_name.label }}
+{{ form.last_name }}
+<ul>
+{% for error in form.last_name.errors %}
+    <li class="error">{{ error }}</li>
+{% endfor %}
+</ul>
+
+{{ form.email.label }}
+{{ form.email }}
+<ul>
+{% for error in form.email.errors %}
+    <li class="error">{{ error }}</li>
+{% endfor %}
+</ul>
+
+{{ form.clients.label }}
+{{ form.clients }}
+<ul>
+{% for error in form.clients.errors %}
+    <li class="error">{{ error }}</li>
+{% endfor %}
+</ul>
+
+{{ form.relation_to_clients.label }}
+{{ form.relation_to_clients }}
+<ul>
+{% for error in form.relation_to_clients.errors %}
+    <li class="error">{{ error }}</li>
+{% endfor %}
+</ul>
+    
+{{ form.submit }}
+

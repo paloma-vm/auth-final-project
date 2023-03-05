@@ -22,7 +22,7 @@ class ClientForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class UserForm(FlaskForm):
-    """Form to create a new user profile (kin or family profile)"""
+    """Form to create a new user profile (role=family or role=admin)"""
     first_name = StringField('First Name',
         validators=[DataRequired(), Length(min=2, max=80, message="Your name must be between 8 and 80 characters long.")])
     last_name = StringField('First Name',
@@ -35,6 +35,9 @@ class UserForm(FlaskForm):
         query_factory=lambda: Client.query)
     relation_to_client = StringField('Relation to Client',
         validators=[DataRequired(), Length(min=2, max=80, message="Your relation must be between 8 and 80 characters long.")])
+    role = StringField('Role: admin or user',
+        validators=[DataRequired(), Length(min=2, max=80, message="Your relation must be between 8 and 80 characters long.")])
+    
     submit = SubmitField('Submit')
 
     def validate_email(self, email):
@@ -46,15 +49,13 @@ class UserForm(FlaskForm):
 
 class MessageForm(FlaskForm):
     """Form to create a new message"""
+    receiver = StringField('Email',
+        validators=[DataRequired(), Length(min=8, max=120, message="The email address must be between 8 and 120 characters long.")])
     subject = StringField('Subject',
         validators=[DataRequired(), Length(min=2, max=80, message="Your subject must be between 2 and 80 characters long.")])
     body = TextAreaField('Body',
         validators=[DataRequired(), Length(min=2, max=1000, message="Your message must be between 2 and 1000 characters long.")])
-    photo_url = StringField('Photo URL',
-        validators=[
-            DataRequired(),
-            Length(min=5, max=80, message="Your Photo URL needs to be betweeen 5 and 80 chars")
-            ])
+    photo_url = StringField('Photo URL')
     submit = SubmitField('Submit')
 
 

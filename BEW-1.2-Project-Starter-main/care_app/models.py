@@ -40,8 +40,6 @@ class Client(db.Model):
     relation_to_user = db.Column(db.String(80))
     connected_to_user = db.relationship('User', secondary='clients_users', back_populates='connected_to_clients')
 
-
-
     def __repr__(self):
         return f"Client: '{self.first_name} {self.last_name}'"
 
@@ -57,11 +55,10 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(80))
     email = db.Column(db.String(120), unique=True)
     # kin_to = db.relationship('Client', secondary='clients_users', back_populates='kin_id')
-    connected_to_clients_ = db.relationship('Client', secondary='clients_users', back_populates='connected_to_user')
-
+    connected_to_clients = db.relationship('Client', secondary='clients_users', back_populates='connected_to_user')
     relation_to_clients = db.Column(db.String(80))
     # clients_under_care = db.relationship('Client', secondary='clients_users', back_populates='caregiver')
-
+    role = db.Column(db.String(80))
 
     def __repr__(self):
         return f"User: '{self.first_name} {self.last_name}'"
@@ -97,12 +94,12 @@ class Message(db.Model):
     """Message model"""
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
+    receiver = db.Column(db.String(80), nullable=False)
     subject = db.Column(db.String(80), nullable=False)
     body = db.Column(db.Text, nullable=False)
+    photo_url = db.Column(db.String(100))
     sender = db.Column(db.String(80), nullable=False)
-    receiver = db.Column(db.String(80), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    time = db.Column(db.Time, nullable=False)
+    timestamp = db.Column(db.Date, nullable=False)
 
     def __repr__(self):
         return f"Message: '{self.message}'"

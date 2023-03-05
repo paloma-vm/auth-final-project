@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h4>Edit user details:</h4>
+
+<form method="POST" action="/edit-user">
+    {{ form.csrf_token }}
+
+    {% include 'user-form.html' %}
+</form>
+
+{% endblock %}
