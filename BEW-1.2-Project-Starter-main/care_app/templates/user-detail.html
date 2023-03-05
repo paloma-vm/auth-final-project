@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Account Details</h1>
+
+<strong>User:</strong> {{client.first_name}}{{client.last_name}}
+
+
+
+<h2>Messages</h2>
+
+<div class="messages">
+    {% for activity in client.activities_attended %}
+    <div class="message-details">
+        <a href="/messages/{{ message.id }}">
+        <p><strong>{{ message.name }}</strong></p></a>
+        <p><strong>{{ message.date }}</strong></p>
+    </div>
+    {% endfor %}
+</div>
+
+
+<h2>Edit Account</h2>
+
+<form method="POST", action="{{ url_for('main.edit-user', user_id=user.id ) }}">
+    {{ form.csrf_token }}
+    <fieldset>
+        <legend>Edit this User:</legend>
+
+        {% include 'client-form.html' %}
+        {{ form.submit }}
+
+    </fieldset>
+</form>
+
+{% endblock %}

@@ -17,7 +17,7 @@ class ClientForm(FlaskForm):
     diet = SelectField('Diet', choices=Diet.choices())
     # medications = QuerySelectMultipleField('Medications',
         # query_factory=lambda: Medication.query)
-    kin = StringField('Kin ID')
+    # kin_id = StringField('Kin ID')
     start_date = DateField('Start Date')
     submit = SubmitField('Submit')
 
@@ -68,6 +68,11 @@ class MessageForm(FlaskForm):
         validators=[DataRequired(), Length(min=2, max=80, message="Your subject must be between 2 and 80 characters long.")])
     body = TextAreaField('Body',
         validators=[DataRequired(), Length(min=2, max=1000, message="Your message must be between 2 and 1000 characters long.")])
+    photo_url = StringField('Photo URL',
+        validators=[
+            DataRequired(),
+            Length(min=5, max=80, message="Your Photo URL needs to be betweeen 5 and 80 chars")
+            ])
     submit = SubmitField('Submit')
 
 

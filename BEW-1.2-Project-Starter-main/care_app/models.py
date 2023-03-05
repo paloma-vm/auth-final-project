@@ -41,11 +41,13 @@ class Client(db.Model):
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
     room_number = db.Column(db.Integer, nullable=False)
-    date_of_birth = db.Column(db.Date, nullable=False)
+    date_of_birth = db.Column(db.Date)
     diet = db.Column(db.Enum(Diet), nullable=False)
     # medications = db.relationship('Medication', secondary='client_medications', back_populates='clients')
-    start_date = db.Column(db.Date, nullable=False)
-    kin = db.relationship('User', secondary='clients_users', back_populates='clients')
+    # start_date = db.Column(db.Date, nullable=False)
+    start_date = db.Column(db.Date) # trying to make it easier to test
+
+    kin_id = db.relationship('User', secondary='clients_users', back_populates='clients')
     activities_attended = db.relationship('Activity', secondary='activities_clients', back_populates='clients_who_attended')
     caregiver = db.relationship('Caregiver', secondary='caregivers_clients', back_populates='clients_under_care')
 
@@ -76,7 +78,7 @@ class User(UserMixin, db.Model):
     # could be made at signup with only username and password, no other info needed
     last_name = db.Column(db.String(80))
     email = db.Column(db.String(120), unique=True)
-    clients = db.relationship('Client', secondary='clients_users', back_populates='kin')
+    clients = db.relationship('Client', secondary='clients_users', back_populates='kin_id')
     relation_to_client = db.Column(db.String(80))
 
     def __repr__(self):

@@ -46,12 +46,5 @@
 {% endfor %}
 </ul>
 
-{{ form.kin.label }}
-{{ form.kin }}
-<ul>
-{% for error in form.kin.errors %}
-    <li class="error">{{ error }}</li>
-{% endfor %}
-</ul>
     
 {{ form.submit }}

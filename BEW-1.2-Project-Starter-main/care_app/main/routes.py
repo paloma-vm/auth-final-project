@@ -33,8 +33,7 @@ def create_client():
             date_of_birth = form.date_of_birth.data,
             diet = form.diet.data,
             start_date = form.start_date.data,
-            kin = form.kin.data,
-        )
+            )
         db.session.add(new_client)
         db.session.commit()
 
@@ -60,7 +59,7 @@ def client_detail(client_id):
         client.diet = form.diet.data
         # client.medications = form.medications.data
         client.start_date = form.start_date.data
-        client.kin = form.kin.data
+        # client.kin_id = form.kin_id.data
     
         db.session.commit()
 
@@ -69,5 +68,25 @@ def client_detail(client_id):
     
     # Send the form to the template and use it to render the form fields
     client = Client.query.get(client_id)
-    return render_template('client_detail.html', client=client, form=form)
+    return render_template('client-detail.html', client=client, form=form)
+
+@main.route('/create-message', methods=['GET', 'POST'])
+@login_required
+def create_message():
+    '''Create a new Message'''
+    form = MessageForm()
+    # if form is submitted with no errors:
+    if form.validate_on_submit():
+        new_message = Message(
+            subject = form.subject.data,
+            body = form.body.data,
+            photo_url = form.photo_url.data
+        )
+        db.session.add(new_message)
+        db.session.commit()
+
+        flash('New message was created successfully.')
+        return redirect(url_for('main.user_detail', message_id=new_message.id))
+
+    return render_template('create-message.html', form=form)
 
