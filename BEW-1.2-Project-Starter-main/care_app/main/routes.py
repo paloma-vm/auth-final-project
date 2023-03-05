@@ -2,8 +2,8 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, datetime
 
-from care_app.models import User, Client, Caregiver, Activity
-from care_app.main.forms import ClientForm, UserForm, CaregiverForm, MessageForm
+from care_app.models import User, Client, Activity, Message
+from care_app.main.forms import ClientForm, UserForm, MessageForm
 
 # Import app and db from care_app startup package so that we can run app
 from care_app.extensions import app, db, bcrypt
@@ -14,10 +14,10 @@ main = Blueprint('main', __name__)
 #           Routes                       #
 ##########################################
 
-@main.route('/') 
+@main.route('/')
 def homepage():
-    
-    return render_template('home.html')
+    all_clients = Client.query.all()
+    return render_template('home.html', all_clients=all_clients)
 
 @main.route('/create-client', methods=['GET', 'POST'])
 @login_required
