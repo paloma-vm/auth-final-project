@@ -159,19 +159,17 @@ def user_detail(username):
 @login_required
 def edit_user(user_id):
     '''Edit User info'''
-    user = User.query.get(username)
-    # user = User.query.filter_by(username=username).one()
-
+    user = User.query.get(user_id)
 
     form = UserForm(obj=user)
     # if form is submitted with no errors: update the User object and save to the database
     # flash a confirmation message and redirect user to the user detail page
     if form.validate_on_submit():
-        # user.username = form.username.data
-        user.password = form.password.data
+        user.username = user.username
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.email = form.email.data
+        user.password = form.password.data
         user.connected_to_clients = form.connected_to_clients.data
         user.relation_to_clients = form.relation_to_clients.data
         user.role = form.role.data
@@ -179,11 +177,11 @@ def edit_user(user_id):
         db.session.commit()
 
         flash('User updated successfully.')
-        return redirect(url_for('main.user_detail', username=user.username))
+        return redirect(url_for('main.user_detail', username=user.username)) # it took me forever to figure this out
     
     # Send the form to the template and use it to render the form fields
-    # user = User.query.get(user_id)
-    user = User.query.filter_by(username=username).first()
+    user = User.query.get(user_id)
+    # user = User.query.filter_by(username=username).first()
 
     return render_template('edit-user.html', user=user, form=form)
 

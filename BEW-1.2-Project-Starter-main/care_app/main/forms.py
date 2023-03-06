@@ -29,8 +29,8 @@ class UserForm(FlaskForm):
         validators=[DataRequired(), Length(min=2, max=80, message="Your name must be between 8 and 80 characters long.")])
     email = StringField('Email',
         validators=[DataRequired(), Length(min=8, max=120, message="Your email must be between 8 and 120 characters long.")])
-    # username = StringField('Username',
-    #     validators=[DataRequired(), Length(min=3, max=50)])
+    username = StringField('Username',
+        validators=[DataRequired(), Length(min=3, max=50)])
     password = PasswordField('Password',
         validators=[DataRequired(), Length(min=8, max=80, message="Your password must be between 8 and 80 characters long.")])
     connected_to_clients = QuerySelectMultipleField('Name of Client(s)',
