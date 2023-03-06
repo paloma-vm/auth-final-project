@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Edit Client</h1>
+<h4><strong>Edit Client</h4></strong>
 
-<strong>Client:</strong> {{client.first_name}}{{client.last_name}}
+<h1>{{client.first_name}} {{client.last_name}}</h1>
 
-<form method="POST", action="/edit-client">
+<form method="POST", action="/edit-client/{{ client.id }}"> 
     {{ form.csrf_token }}
-        <legend>Edit this Client:</legend>h
+        <!-- <legend>Edit this Client:</legend> -->
 
-        {% include 'client-form.html' %}
+    {% include 'client-form.html' %}
+    
+    {{ form.submit }}
 
 </form>
 

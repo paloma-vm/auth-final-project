@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, DateField, SelectField, SubmitField, IntegerField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import DataRequired, Length, ValidationError
-from care_app.models import Diet, Client, User
+from care_app.models import Diet, Client, User, Message
 
 class ClientForm(FlaskForm):
     """Form to create a new client profile (resident profile)"""
@@ -25,18 +25,20 @@ class UserForm(FlaskForm):
     """Form to create a new user profile (role=family or role=admin)"""
     first_name = StringField('First Name',
         validators=[DataRequired(), Length(min=2, max=80, message="Your name must be between 8 and 80 characters long.")])
-    last_name = StringField('First Name',
+    last_name = StringField('Last Name',
         validators=[DataRequired(), Length(min=2, max=80, message="Your name must be between 8 and 80 characters long.")])
     email = StringField('Email',
         validators=[DataRequired(), Length(min=8, max=120, message="Your email must be between 8 and 120 characters long.")])
+    # username = StringField('Username',
+    #     validators=[DataRequired(), Length(min=3, max=50)])
     password = PasswordField('Password',
         validators=[DataRequired(), Length(min=8, max=80, message="Your password must be between 8 and 80 characters long.")])
-    clients = QuerySelectMultipleField('Name of Client(s)',
+    connected_to_clients = QuerySelectMultipleField('Name of Client(s)',
         query_factory=lambda: Client.query)
-    relation_to_client = StringField('Relation to Client',
+    relation_to_clients = StringField('Relation to Client',
         validators=[DataRequired(), Length(min=2, max=80, message="Your relation must be between 8 and 80 characters long.")])
     role = StringField('Role: admin or user',
-        validators=[DataRequired(), Length(min=2, max=80, message="Your relation must be between 8 and 80 characters long.")])
+        validators=[DataRequired(), Length(min=2, max=80, message="Your relation must be either 'admin' or 'user'")])
     
     submit = SubmitField('Submit')
 

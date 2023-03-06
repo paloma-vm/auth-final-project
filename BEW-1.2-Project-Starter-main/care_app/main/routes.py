@@ -19,6 +19,8 @@ def homepage():
     all_clients = Client.query.all()
     return render_template('home.html', all_clients=all_clients)
 
+# ------CLIENT----------------------------------------------------------------
+
 @main.route('/create-client', methods=['GET', 'POST'])
 @login_required
 def create_client():
@@ -73,11 +75,15 @@ def edit_client(client_id):
         db.session.commit()
 
         flash('Client updated successfully.')
-        return redirect(url_for('main.client_detail', client_id=client_id))
+        # client = Client.query.get(client_id)
+        return redirect(url_for('main.client_detail', client_id=client.id))
     
     # Send the form to the template and use it to render the form fields
     client = Client.query.get(client_id)
+    # return render_template('edit-client.html', client=client, form=form)
     return render_template('edit-client.html', client=client, form=form)
+
+# ------MESSAGE----------------------------------------------------------------
 
 @main.route('/create-message', methods=['GET', 'POST'])
 @login_required
@@ -137,6 +143,50 @@ def edit_message(message_id):
     # Send the form to the template and use it to render the form fields
     message = Message.query.get(message_id)
     return render_template('edit-message.html',message=message, form=form)
+
+# ------USER----------------------------------------------------------------
+@main.route('/user/<username>')
+@login_required
+def user_detail(username):
+    '''View User info'''
+    # user = User.query.get(username)
+    user = User.query.filter_by(username=username).one()
+
+    return render_template('user-detail.html', user=user)
+
+
+@main.route('/edit-user/<user_id>', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    '''Edit User info'''
+    user = User.query.get(username)
+    # user = User.query.filter_by(username=username).one()
+
+
+    form = UserForm(obj=user)
+    # if form is submitted with no errors: update the User object and save to the database
+    # flash a confirmation message and redirect user to the user detail page
+    if form.validate_on_submit():
+        # user.username = form.username.data
+        user.password = form.password.data
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data
+        user.connected_to_clients = form.connected_to_clients.data
+        user.relation_to_clients = form.relation_to_clients.data
+        user.role = form.role.data
+    
+        db.session.commit()
+
+        flash('User updated successfully.')
+        return redirect(url_for('main.user_detail', username=user.username))
+    
+    # Send the form to the template and use it to render the form fields
+    # user = User.query.get(user_id)
+    user = User.query.filter_by(username=username).first()
+
+    return render_template('edit-user.html', user=user, form=form)
+
 
 
 

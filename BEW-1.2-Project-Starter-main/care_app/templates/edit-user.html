@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h4>Edit user details:</h4>
+<h4><strong>Edit User: {{ user.username }}</h4></strong>
 
-<form method="POST" action="/edit-user">
+<form method="POST" action="/edit-user/{{ user.username }}">
     {{ form.csrf_token }}
 
     {% include 'user-form.html' %}

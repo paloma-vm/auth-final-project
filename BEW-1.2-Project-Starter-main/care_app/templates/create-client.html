@@ -4,12 +4,11 @@
 
 <form method="POST" action="/create-client">
     {{ form.csrf_token }}
-    <fieldset>
         <legend>Enter new client info</legend>
 
             {% include 'client-form.html' %}
+            {{ form.submit }}
 
-    </fieldset>
 </form>
 
 {% endblock %}

@@ -23,10 +23,10 @@
 {% endfor %}
 </ul>
 
-{{ form.clients.label }}
-{{ form.clients }}
+{{ form.connected_to_clients.label }}
+{{ form.connected_to_clients }}
 <ul>
-{% for error in form.clients.errors %}
+{% for error in form.connected_to_clients.errors %}
     <li class="error">{{ error }}</li>
 {% endfor %}
 </ul>
@@ -35,6 +35,14 @@
 {{ form.relation_to_clients }}
 <ul>
 {% for error in form.relation_to_clients.errors %}
+    <li class="error">{{ error }}</li>
+{% endfor %}
+</ul>
+
+{{ form.role.label }}
+{{ form.role }}
+<ul>
+{% for error in form.role.errors %}
     <li class="error">{{ error }}</li>
 {% endfor %}
 </ul>

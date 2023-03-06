@@ -1,10 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Client Detail</h1>
+<h4>Client Detail</h4>
 
-<strong>Client:</strong> {{client.first_name}} {{client.last_name}}
-
+<h1><strong>{{client.first_name}} {{client.last_name}}</strong></h1>
+<div>
+    <li><strong>room number: </strong>{{client.room_number}}</li>
+    <li><strong>date of birth: </strong>{{client.date_of_birth}}</li> 
+    <li><strong>dietary needs: </strong>{{client.diet}}</li> 
+    <li><strong>start date: </strong>{{client.start_date}}</li> 
+<!-- <p><strong>room number: </strong>{{client.room_number}}</p>
+<p><strong>date of birth: </strong>{{client.date_of_birth}}</p> 
+<p><strong>dietary needs: </strong>{{client.diet}}</p> 
+<p><strong>start date: </strong>{{client.start_date}}</p>  -->
+</div>
 
 
 <h5>Activities Attended</h5>
@@ -19,6 +28,6 @@
     {% endfor %}
 </div>
 
-    <a href="/edit-client{{ client_id }}">Edit Client</a>
+    <a href="/edit-client/{{ client.id }}">Edit Client</a>
 
 {% endblock %}

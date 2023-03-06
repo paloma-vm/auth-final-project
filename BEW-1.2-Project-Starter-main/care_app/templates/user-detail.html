@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Account Details</h1>
+<h4>Account Details</h4>
 
-<strong>User:</strong> {{client.first_name}}{{client.last_name}}
+<h1><strong>{{user.first_name}} {{user.last_name}}</strong></h1>
 
-
-
+<div>
+    <li><strong>username: </strong>{{user.username}}</li>
+    <li><strong>email address: </strong>{{user.email}}</li> 
+    <li><strong>connected to clients: </strong>{{user.connected_to_clients}}</li> 
+    <li><strong>relation to clients: </strong>{{user.relation_to_clients}}</li> 
+    <li><strong>role: </strong>{{user.role}}</li> 
+</div>
 <h2>Messages</h2>
 
 <div class="messages">
-    {% for activity in client.activities_attended %}
+    {% for message in user.messages_sent %}
     <div class="message-details">
         <a href="/messages/{{ message.id }}">
         <p><strong>{{ message.name }}</strong></p></a>
@@ -20,17 +25,6 @@
 </div>
 
 
-<h2>Edit Account</h2>
-
-<form method="POST", action="{{ url_for('main.edit-user', user_id=user.id ) }}">
-    {{ form.csrf_token }}
-    <fieldset>
-        <legend>Edit this User:</legend>
-
-        {% include 'client-form.html' %}
-        {{ form.submit }}
-
-    </fieldset>
-</form>
+<a href="/edit-user/{{ user.id }}">Edit User</a>
 
 {% endblock %}
