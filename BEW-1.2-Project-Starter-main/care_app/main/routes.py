@@ -92,7 +92,7 @@ def create_message():
     form = MessageForm()
     # form.to.query = User.query.all()
     # form.to.query = User.query.filter_by()
-
+    print(current_user)
     # if form is submitted with no errors:
     if form.validate_on_submit():
         new_message = Message(

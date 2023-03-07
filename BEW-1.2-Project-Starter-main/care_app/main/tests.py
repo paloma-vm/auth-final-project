@@ -3,7 +3,7 @@ import os
 import unittest
 import app
 
-from datetime import date
+from datetime import date, datetime
 from flask_login import current_user
 from care_app.extensions import app, db, bcrypt
 from care_app.models import User, Client, Activity, Message
@@ -109,7 +109,7 @@ class MainTests(unittest.TestCase):
         login(self.app, 'Myname', '123456')
 
         # scenario
-        """Test creating a client """
+        """Test creating a client while logged in"""
         # make a POST request with data
         post_data = {
             'first_name': 'Joe',
@@ -126,6 +126,40 @@ class MainTests(unittest.TestCase):
         self.assertIsNotNone(created_client)
         self.assertEqual(created_client.room_number, 1234)
 
-    
-        
-    
+    def test_create_client_logged_out(self):
+        # set up
+        create_users()
+
+        # scenario
+        """Test creating a client while logged out"""
+        # make a GET request
+        response = self.app.get('/create-client')
+       
+        # make sure the user is redirected to the login page
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('login?next=%2Fcreate-client', response.location)
+
+# I am writing this test in an attempt to solve the issues with create-message
+    def test_create_message_logged_in(self):
+        # set up
+        create_users()
+        login(self.app, 'Myname', '123456')
+
+        # scenario
+        """Test creating a message while logged in """
+        # make a POST request with data
+        post_data = {
+            'to': 'user_1',
+            'subject': 'bus trip',
+            'message_body': 'Join us today!',
+            'photo_url': '',
+            'sender_id': current_user.id,
+            'sender': current_user,
+            'timestamp': datetime.now().strftime('%A, %B %d, %Y, %H:%M')
+        }
+        self.app.post('/create-message', data=post_data)
+       
+        # make sure the message was actually created
+        created_message = Message.query.filter_by(subject='bus trip').one()
+        self.assertIsNotNone(created_message)
+        self.assertEqual(created_message.photo_url, '')

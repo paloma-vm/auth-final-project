@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from care_app.config import Config
 from flask_migrate import Migrate
+
 import os
 
 app = Flask(__name__)
@@ -21,7 +22,7 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-from .models import User
+from care_app.models import User
 
 @login_manager.user_loader
 def load_user(user_id):
