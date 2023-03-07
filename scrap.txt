@@ -28,3 +28,18 @@ def client_detail(client_id):
     # Send the form to the template and use it to render the form fields
     client = Client.query.get(client_id)
     return render_template('client-detail.html', client=client, form=form)
+
+    <!-- {% if current_user.is_authenticated and current_user.role is auth %} -->
+
+    {{ form.to.label }}
+    {{ form.to }}
+    
+    {{ form.to.label }}
+    {{ form.to(placeholder="subject") }}
+    <ul>
+    {% for error in form.to.errors %}
+        <li class="error">{{ error }}</li>
+    {% endfor %}
+    </ul>
+
+    <!-- {% endif %} -->

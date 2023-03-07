@@ -11,10 +11,9 @@
         <p><strong>{{ message.subject }}</strong></p>
         <p><strong>{{ message.body }}</strong></p>
         <p><strong>{{ message.photo_url }}</strong></p>
-        <p><strong>{{ message.receiver }}</strong></p>
         <p><strong>{{ message.timestamp }}</strong></p>
 </div>
 
-    <a href="/edit-message{{ message_id }}">Edit Message</a>
+    <a href="/edit-message{{ message.id }}">Edit Message</a>
 
 {% endblock %}

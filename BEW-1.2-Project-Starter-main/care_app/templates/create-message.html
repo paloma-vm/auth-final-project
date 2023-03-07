@@ -5,6 +5,16 @@
 
     <h2>Compose Message</h2>
 
+    {{ form.to.label }}
+    {{ form.to }}
+    <ul>
+    {% for error in form.to.errors %}
+        <li class="error">{{ error }}</li>
+    {% endfor %}
+    </ul>
+
+
+
     {{ form.subject.label }}
     {{ form.subject(placeholder="subject") }}
     <ul>
@@ -13,10 +23,10 @@
     {% endfor %}
     </ul>
     
-    {{ form.body.label }}
-    {{ form.body(placeholder="write your message here") }}
+    {{ form.message_body.label }}
+    {{ form.message_body(placeholder="write your message here") }}
     <ul>
-    {% for error in form.body.errors %}
+    {% for error in form.message_body.errors %}
         <li class="error">{{ error }}</li>
     {% endfor %}
     </ul>

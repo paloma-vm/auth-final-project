@@ -1,6 +1,6 @@
 # Create your forms here.
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DateField, SelectField, SubmitField, IntegerField, TextAreaField
+from wtforms import StringField, PasswordField, DateField, SelectField, SelectMultipleField ,SubmitField, IntegerField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import DataRequired, Length, ValidationError
 from care_app.models import Diet, Client, User, Message
@@ -51,11 +51,11 @@ class UserForm(FlaskForm):
 
 class MessageForm(FlaskForm):
     """Form to create a new message"""
-    receiver = StringField('Email',
-        validators=[DataRequired(), Length(min=8, max=120, message="The email address must be between 8 and 120 characters long.")])
+    # to = QuerySelectMultipleField('To')
+    to = QuerySelectField('To', query_factory=lambda: User.query, allow_blank=False)
     subject = StringField('Subject',
         validators=[DataRequired(), Length(min=2, max=80, message="Your subject must be between 2 and 80 characters long.")])
-    body = TextAreaField('Body',
+    message_body = TextAreaField('Message Body',
         validators=[DataRequired(), Length(min=2, max=1000, message="Your message must be between 2 and 1000 characters long.")])
     photo_url = StringField('Photo URL')
     submit = SubmitField('Submit')

@@ -59,9 +59,13 @@ class User(UserMixin, db.Model):
     relation_to_clients = db.Column(db.String(80))
     # clients_under_care = db.relationship('Client', secondary='clients_users', back_populates='caregiver')
     role = db.Column(db.String(80))
+    messages_sent = db.relationship('Message', secondary='users_messages', back_populates='sender')
+    inbox = db.relationship('Message', secondary='users_messages', back_populates='to')
 
     def __repr__(self):
-        return f"User: '{self.first_name} {self.last_name}'"
+        return f"User: {self.username}"
+
+        # return f"User: '{self.first_name} {self.last_name}'"
 
 
 class Activity(db.Model):
@@ -94,12 +98,22 @@ class Message(db.Model):
     """Message model"""
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
-    receiver = db.Column(db.String(80), nullable=False)
+    to = db.relationship('User', secondary='users_messages', back_populates='inbox')
     subject = db.Column(db.String(80), nullable=False)
-    body = db.Column(db.Text, nullable=False)
+    message_body = db.Column(db.Text, nullable=False)
     photo_url = db.Column(db.String(100))
-    sender = db.Column(db.String(80), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    sender = db.relationship('User', back_populates='messages_sent')
     timestamp = db.Column(db.Date, nullable=False)
 
     def __repr__(self):
-        return f"Message: '{self.message}'"
+        return f"Message: '{self.subject}'"
+    
+    def __str__(self):
+        return str(self.subject)
+    
+user_message_table = db.Table('users_messages',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('message_id', db.Integer, db.ForeignKey('messages.id'), primary_key=True)
+)
+

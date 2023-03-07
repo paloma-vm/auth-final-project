@@ -90,17 +90,21 @@ def edit_client(client_id):
 def create_message():
     '''Create a new Message'''
     form = MessageForm()
+    # form.to.query = User.query.all()
+    # form.to.query = User.query.filter_by()
+
     # if form is submitted with no errors:
     if form.validate_on_submit():
         new_message = Message(
-            receiver = form.receiver.data,
+            to = form.to.data,
             subject = form.subject.data,
-            body = form.body.data,
+            message_body = form.message_body.data,
             photo_url = form.photo_url.data,
             sender_id = current_user.id,
-            sender = User.query.get(current_user.id),
+            sender = current_user,
+            # sender = current_user.username,
             timestamp = datetime.now().strftime('%A, %B %d, %Y, %H:%M')
-            )
+        )
         db.session.add(new_message)
         db.session.commit()
 
